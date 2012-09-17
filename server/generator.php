@@ -41,7 +41,9 @@ extends helper
             }
         }
         $global_manifest_path = $this->getConfig()['document_root'].$this->getConfig()['manifest_filename'];
-        file_put_contents($global_manifest_path, json_encode($manifest_data));
+        $encoded_content = json_encode($manifest_data);
+        file_put_contents($global_manifest_path, $encoded_content);
+        @file_put_contents("$global_manifest_path.gz", gzcompress($encoded_content, 9));
         $this->writeLn("Global manifest file generated!");
     }
 

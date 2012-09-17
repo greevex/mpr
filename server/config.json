@@ -1,5 +1,5 @@
 {
-    "libs_root":"/opt/greevex/repo-mpr/libs/",
-    "document_root":"/opt/greevex/repo-mpr/htdocs/",
+    "libs_root":"/opt/mpr/libs/",
+    "document_root":"/opt/mpr/htdocs/",
     "manifest_filename": "manifest-global.mpr.json"
 }

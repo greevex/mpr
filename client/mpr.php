@@ -1,5 +1,7 @@
 <?php
 
+namespace mpr\client;
+
 class mpr
 extends helper
 {

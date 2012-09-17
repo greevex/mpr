@@ -1,5 +1,7 @@
 <?php
 
+namespace mpr\client;
+
 class helper
 {
     static $mpr_root_filename = ".mprroot";
@@ -94,6 +96,10 @@ class helper
             $context = stream_context_create($opts);
             if($destination == null) {
                 $result = file_get_contents($url, false, $context);
+                if($result == false) {
+                    $this->writeLn("Fail!");
+                    return false;
+                }
                 $this->writeLn("OK!");
                 return $result;
             } else {
@@ -162,8 +168,15 @@ class helper
 
     protected function _getPackageList()
     {
-        $url = self::getConfig()['host'] . self::getConfig()['manifest_filename'];
-        $data = $this->_wget($url);
+        $manifest_raw = self::getConfig()['host'] . self::getConfig()['manifest_filename'];
+        $manifest_gz = self::getConfig()['host'] . self::getConfig()['manifest_filename'] . ".gz";
+        $data = @$this->_wget($manifest_gz);
+        if($data == false) {
+            $data = @$this->_wget($manifest_raw);
+        } else {
+            $data = gzuncompress($data);
+        }
+
         $packages = json_decode($data, 1);
         if(!is_array($packages)) {
             return $this->writeLn("[ERROR] Error loading package list from {$url}");

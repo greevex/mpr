@@ -1,13 +1,15 @@
-mpr
-===
+# mpr
 
-Package Repository Manager based on simple method.
+\m/ Package Repository.
+===
 
 All you need is: static web-server as repository, cron (to generate global manifest). That's all!
 
 Requirements: PHP 5.4+, crond, any web-server (for repository)
 
-*Install steps*
+Installation
+===
+
 Server-side:
 * Create new web host (e.g. http://mpr.greevex.ru)
 * Modify your server-side config (/path/to/mpr/server/config.json)
@@ -21,6 +23,9 @@ Client-side:
 * mkdir ~/bin
 * echo '/usr/bin/php /path/to/mpr/client/mpr.run.php $*' > ~/bin/mpr
 * chmod 0744 ~/bin/mpr
+
+Usage
+===
 
 * mpr init - to init repository in current directory
 * mpr search <query> - to search packages

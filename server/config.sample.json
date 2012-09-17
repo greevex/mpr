@@ -1,6 +1,4 @@
 {
-    "host":"http://mpr.sdstream.ru/",
-    "login": "foo",
-    "password": "bar",
+    "web_root":"/opt/greevex/mpr/htdocs/",
     "manifest_filename": "manifest-global.mpr.json"
 }

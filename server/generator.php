@@ -58,7 +58,8 @@ extends helper
             $lib_path = $this->getConfig()['libs_root'] . $package['name'];
 
             if(file_exists($phar_file)) {
-                \Phar::unlinkArchive($phar_file);
+                $this->writeLn("Package already exists!");
+                return true;
             }
             $phar = new \Phar($phar_file);
             $phar->buildFromDirectory($lib_path);

@@ -68,9 +68,9 @@ extends helper
         return true;
     }
 
-    public function search($packageName)
+    public function search($pattern)
     {
-        $packages = $this->_search($packageName);
+        $packages = $this->_search($pattern);
         if($packages === false) {
             $this->writeLn("Please check your search string...");
             return;

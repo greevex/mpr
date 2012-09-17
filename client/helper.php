@@ -154,10 +154,10 @@ class helper
         $matches = [];
         foreach($packageList as $package) {
             if(
-                strpos($package['name'], $input) !== false ||
-                strpos($package['meta']['type'], $input) !== false ||
-                strpos($package['meta']['tags'], $input) !== false ||
-                strpos(implode(',', $package['depends']), $input) !== false
+                preg_match("/{$input}/ui", $package['name']) !== false ||
+                preg_match("/{$input}/ui", $package['meta']['type']) !== false ||
+                preg_match("/{$input}/ui", $package['meta']['tags']) !== false ||
+                preg_match("/{$input}/ui", implode(',', $package['depends'])) !== false
             ) {
                 $matches[] = $package;
             }

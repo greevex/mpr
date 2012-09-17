@@ -15,11 +15,12 @@ Server-side:
 
 Client-side:
 * Modify your client-side config (/path/to/mpt/client/config.json)
-* (Optional) For easy use create shell script
-* * mkdir ~/bin
-* * echo '/usr/bin/php /path/to/mpr/client/mpr.run.php $*' > ~/bin/mpr
-* * chmod 0744 ~/bin/mpr
-* * Enjoy!
+* Enjoy!
+
+(Optional)
+* mkdir ~/bin
+* echo '/usr/bin/php /path/to/mpr/client/mpr.run.php $*' > ~/bin/mpr
+* chmod 0744 ~/bin/mpr
 
 * mpr init - to init repository in current directory
 * mpr search <query> - to search packages

@@ -13,25 +13,29 @@ extends helper
             $this->writeLn("[ERROR] Document root doesn't exists in [{$this->getConfig()['document_root']}]! Please set up it first!");
             return false;
         }
-        $files = scandir($this->getConfig()['document_root']);
+        $this->writeLn("Reading libs path...");
+        $files = scandir($this->getConfig()['libs_root']);
         if(!is_array($files)) {
             $this->writeLn("[ERROR] Error parsing files from document root. (Check permissions?)");
             return false;
         }
         $manifest_data = [];
+        $this->writeLn("Found " . count($files) . " files...");
         foreach($files as $packageName) {
-            if(!is_dir($packageName) || strpos($packageName, '.') === 0) {
+            if(strpos($packageName, '.') === 0) {
                 continue;
             }
+            $this->writeLn("Processing package {$packageName}...");
             $package_manifest = $this->getManifest($packageName);
             if($package_manifest == false) {
                 $this->writeLn("[ERROR] Error reading manifest for package {$packageName}");
                 continue;
             }
+            $this->writeLn("Creating phar package {$packageName}...");
             $result = $this->createMprPackage($package_manifest);
             if($result) {
                 $manifest_data[$packageName] = $package_manifest;
-                $this->writeLn("mpr package {$packageName} was created!");
+                $this->writeLn("Package {$packageName} was created!");
             } else {
                 $this->writeLn("[ERROR] Error creating mpr package {$packageName}!");
             }
@@ -45,8 +49,11 @@ extends helper
     {
         try {
             $phar_path = $this->getConfig()['document_root'] . "{$package['name']}/";
-            $phar_file = "{$phar_path}/{$package['name']}.phar";
-            $lib_path = $this->getConfig()['libs_root'] . "{$package['name']}";
+            if(!file_exists($phar_path)) {
+                @mkdir($phar_path, 0777, true);
+            }
+            $phar_file = "{$phar_path}{$package['name']}.phar";
+            $lib_path = $this->getConfig()['libs_root'] . $package['name'];
 
             if(file_exists($phar_file)) {
                 \Phar::unlinkArchive($phar_file);
@@ -54,7 +61,7 @@ extends helper
             $phar = new \Phar($phar_file);
             $phar->buildFromDirectory($lib_path);
             $phar->setStub($phar->createDefaultStub($package['package']['init']));
-            $phar->compressFiles(\Phar::PHAR);
+            $phar->compressFiles(\Phar::GZ);
             return true;
         } catch(\Exception $e) {
             $this->writeLn("[ERROR] Package `{$package['name']}`: {$e->getMessage()}");
@@ -64,12 +71,12 @@ extends helper
 
     protected function loadManifest($fullpath)
     {
-        $manifest_data = @file_get_contents("{$fullpath}/manifest.mpr.json");
+        $manifest_data = file_get_contents("{$fullpath}/manifest.mpr.json");
         if($manifest_data === null || $manifest_data === false) {
             $this->writeLn("[ERROR] manifest.mpr.json not found!");
             return false;
         }
-        $manifest = json_decode($manifest_data);
+        $manifest = json_decode($manifest_data, true);
         if($manifest == null) {
             $this->writeLn("[ERROR] unable to parse manifest.mpr.json!");
             return false;
@@ -102,6 +109,7 @@ extends helper
         $this->checkParam($package['meta'], "type");
         $this->checkParam($package['meta'], "tags");
         $this->checkParam($package, "depends", true);
+        return true;
     }
 
     public function getManifest($packageName)

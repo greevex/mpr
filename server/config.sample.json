@@ -1,0 +1,6 @@
+{
+    "host":"http://mpr.sdstream.ru/",
+    "login": "foo",
+    "password": "bar",
+    "manifest_filename": "manifest-global.mpr.json"
+}

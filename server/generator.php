@@ -67,6 +67,9 @@ extends helper
             return true;
         } catch(\Exception $e) {
             $this->writeLn("[ERROR] Package `{$package['name']}`: {$e->getMessage()}");
+            if(file_exists($phar_path)) {
+                rmdir($phar_path);
+            }
             return false;
         }
     }

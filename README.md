@@ -3,9 +3,20 @@
 \m/ Package Repository.
 ===
 
-All you need is: static web-server as repository, cron (to generate global manifest). That's all!
+Also may be "\m/ Phar Repository" ;)
 
-Requirements: PHP 5.4+, crond, any web-server (for repository)
+All you need is: static web-server as repository, cron (to generate global manifest) and Phar php extension.
+
+
+Requirements: PHP 5.4+, crond, any web-server (for repository) and enabled Phar extension (phar.readonly = Off in php.ini)
+
+Where is it would be helpful?
+===
+
+In big projects may be. You create many not big git repositories for libraries. For each small library!
+Then you can use your packages in any project. Just `mpr init && mpr install my_mega_library` :)
+And also if you use mpr you protecting your project from dummies, who like to change something not in repository!
+Phar archives created by mpr is in gzip compression.
 
 Installation
 ===

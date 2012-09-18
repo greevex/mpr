@@ -29,6 +29,8 @@ Usage
 
 * mpr init - to initialize repository in current directory
 * mpr search <query> - to search packages
+* mpr update - update package list from server (auto-update every minute anyway)
+* mpr upgrade [package_name] - update local package(s) to new version (if exists)
 * mpr install <package_name> - to install package and dependencies
 * mpr remove <package_name> - to remove package (Package dependencies would not be removed!)
 

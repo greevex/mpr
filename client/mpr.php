@@ -84,6 +84,10 @@ extends helper
             $this->writeLn("[mpr] Repository already initialized! Nothing to do :)");
             return;
         }
+        if(scandir($path) != ['.', '..']) {
+            $this->writeLn("[ERROR] Current directory not empty!");
+            return false;
+        }
         touch($fullpath);
         $this->writeLn("[mpr] Repository was initialized! Now you can install packages!");
         return true;

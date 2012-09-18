@@ -30,12 +30,12 @@ class helper
     protected function createMprPackage($package)
     {
         try {
-            $phar_path = $this->getConfig()['document_root'] . "{$package['name']}/";
+            $phar_path = $this->getConfig()['document_root'] . $package['name'] . "/";
             if(!file_exists($phar_path)) {
                 @mkdir($phar_path, 0777, true);
             }
             $phar_file = "{$phar_path}{$package['name']}.phar";
-            $lib_path = $this->getConfig()['libs_root'] . $package['name'];
+            $lib_path = $this->getConfig()['libs_root'] . mb_strtolower($package['name']);
 
             if(file_exists($phar_file)) {
                 $this->writeLn("Package already exists!");
@@ -126,7 +126,7 @@ class helper
      */
     protected function getManifest($packageName)
     {
-        $lib_path = $this->getConfig()['libs_root'] . "{$packageName}";
+        $lib_path = $this->getConfig()['libs_root'] . mb_strtolower($packageName);
 
         $manifest = $this->loadManifest($lib_path);
         if($manifest === false) {

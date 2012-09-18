@@ -130,10 +130,10 @@ extends helper
         }
         $name_field = 30;
         $version_field = 10;
-        $description_field = 60;
+        $description_field = 120;
         if(is_array($packages)) {
             $count = count($packages);
-            $format = "%1\${$name_field}s | %2\${$version_field}s | %3\${$description_field}s";
+            $format = "| %1\$-{$name_field}s | %2\$-{$version_field}s | %3\$-{$description_field}s";
             $this->writeLn(sprintf($format, str_repeat('=', $name_field), str_repeat('=', $version_field), str_repeat('=', $description_field)));
             $this->writeLn(sprintf($format, "-NAME-", "-VERSION-", "-DESCRIPTION-"));
             $this->writeLn(sprintf($format, str_repeat('-', $name_field), str_repeat('-', $version_field), str_repeat('-', $description_field)));

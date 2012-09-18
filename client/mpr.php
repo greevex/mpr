@@ -61,12 +61,6 @@ extends helper
         $this->_updatePackageListAndGetIt();
     }
 
-    protected function _installed($package)
-    {
-        $packageLocalPath = $this->getPackagePath($package, 'destination_file');
-        return file_exists($packageLocalPath);
-    }
-
     public function remove($packageName)
     {
         if($this->_installed($packageName)) {
@@ -117,11 +111,6 @@ extends helper
             $this->writeLn(sprintf($format, str_repeat('=', 6 - strlen($count)) . " Total: {$count} " . str_repeat('=', ($name_field/2)), str_repeat('=', $version_field), str_repeat('=', $description_field)));
         }
         print "---\n";
-    }
-
-    public function reindex()
-    {
-
     }
 
     public function help()

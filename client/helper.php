@@ -140,6 +140,12 @@ class helper
         }
     }
 
+    protected function _installed($package)
+    {
+        $packageLocalPath = $this->getPackagePath($package, 'destination_file');
+        return file_exists($packageLocalPath);
+    }
+
     protected function _search($input)
     {
         if(empty($input)) {

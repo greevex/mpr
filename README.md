@@ -8,7 +8,11 @@ Also may be "\m/ Phar Repository" ;)
 All you need is: static web-server as repository, cron (to generate global manifest) and Phar php extension.
 
 
-Requirements: PHP 5.4+, crond, any web-server (for repository) and enabled Phar extension (phar.readonly = Off in php.ini)
+Requirements:
+ * PHP 5.4+
+ * crond
+ * any web-server for repository (static, no php required!)
+ * Enabled Phar extension for PHP (`phar.readonly = Off` in php.ini)
 
 Where is it would be helpful?
 ===
@@ -23,27 +27,29 @@ Installation
 
 Server-side:
 * Create new web host (e.g. http://mpr.greevex.ru)
-* Modify your server-side config (/path/to/mpr/server/config.json)
-* Enable to cron script (* * * * * /usr/bin/php /path/to/mpr/server/check.php)
+* Modify your server-side config `/path/to/mpr/server/config.json`
+* Enable to cron script `* * * * * /usr/bin/php /path/to/mpr/server/check.php`
 
 Client-side:
-* Modify your client-side config (/path/to/mpr/client/config.json)
+* Modify your client-side config `/path/to/mpr/client/config.json`
 * Enjoy!
 
-(Optional)
+Optional for easy use
+```
 * mkdir ~/bin
 * echo '/usr/bin/php /path/to/mpr/client/mpr.run.php $*' > ~/bin/mpr
 * chmod 0755 ~/bin/mpr
+```
 
 Usage
 ===
 
-* mpr init - to initialize repository in current directory
-* mpr search <query> - to search packages
-* mpr update - update package list from server (auto-update every minute anyway)
-* mpr upgrade [package_name] - update local package(s) to new version (if exists)
-* mpr install <package_name> - to install package and dependencies
-* mpr remove <package_name> - to remove package (Package dependencies would not be removed!)
+* `mpr init` - to initialize repository in current directory
+* `mpr search <query>` - to search packages
+* `mpr update` - update package list from server (auto-update every minute anyway)
+* `mpr upgrade [package_name]` - update local package(s) to new version (if exists)
+* `mpr install <package_name>` - to install package and dependencies
+* `mpr remove <package_name>` - to remove package (Package dependencies would not be removed!)
 
 Real usage example
 ===

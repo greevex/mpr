@@ -110,7 +110,6 @@ class helper
                 } else {
                     $this->writeLn("OK!");
                 }
-                $this->writeLn("Connection opened!");
                 $bytesDownloaded = 0;
                 $full_destination = "{$destination}{$filename}";
                 if(!file_exists($destination)) {

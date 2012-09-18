@@ -135,7 +135,7 @@ class helper
                     return false;
                 }
                 $this->writeLn("OK!");
-                return true;
+                return $result;
             } else {
                 $fh = @fopen($url, 'rb', false, $context);
                 if($fh == false) {

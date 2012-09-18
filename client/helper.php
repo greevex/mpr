@@ -37,13 +37,12 @@ class helper
     protected function _searchOne($packageName)
     {
         $packageList = $this->_getPackageList();
-        $this->writeLn("Searching package {$packageName}...");
         foreach($packageList as $package) {
             if($package['name'] == $packageName) {
                 return $package;
             }
         }
-        $this->writeLn("Package not found!");
+        return null;
     }
 
     protected function findMe()
@@ -106,7 +105,8 @@ class helper
                 $fh = @fopen($url, 'rb', false, $context);
                 if($fh == false) {
                     $this->writeLn("");
-                    return $this->writeLn("[ERROR] Error opening url. (Package broken?)");
+                    $this->writeLn("[ERROR] Error opening url. (Package broken?)");
+                    return false;
                 } else {
                     $this->writeLn("OK!");
                 }
@@ -166,8 +166,15 @@ class helper
         return $matches;
     }
 
-    protected function _getPackageList()
+    protected function _getPackageCacheFileName()
     {
+        return '/tmp/packagelist.mpr';
+    }
+
+    protected function _updatePackageListAndGetIt()
+    {
+        $cache_file = $this->_getPackageCacheFileName();
+        $this->writeLn("Update package list...");
         $manifest_raw = self::getConfig()['host'] . self::getConfig()['manifest_filename'];
         $manifest_gz = self::getConfig()['host'] . self::getConfig()['manifest_filename'] . ".gz";
         $data = @$this->_wget($manifest_gz);
@@ -176,10 +183,28 @@ class helper
         } else {
             $data = gzuncompress($data);
         }
+        file_put_contents($cache_file, $data);
+        return $data;
+    }
 
-        $packages = json_decode($data, 1);
-        if(!is_array($packages)) {
-            return $this->writeLn("[ERROR] Error loading package list from {$url}");
+    protected function _getPackageList()
+    {
+        static $packages;
+        if($packages == null) {
+            $cache_file = $this->_getPackageCacheFileName();
+            $filetime = filemtime($cache_file);
+            $next_cache_update = $filetime + 60;
+            if(file_exists($cache_file) && $next_cache_update > time()) {
+                $this->writeLn("Loading package list from cache. " . ($next_cache_update - time()) . " seconds before next update.");
+                $data = file_get_contents($cache_file);
+            } else {
+                $data = $this->_updatePackageListAndGetIt();
+            }
+
+            $packages = json_decode($data, 1);
+            if(!is_array($packages)) {
+                return $this->writeLn("[ERROR] Error loading package list!");
+            }
         }
         return $packages;
     }

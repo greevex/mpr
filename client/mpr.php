@@ -10,39 +10,59 @@ extends helper
      *
      * @param string $packageName Package name
      */
-    public function install($packageName)
+    public function install($packageName, $force = false)
     {
-        if($this->_installed($packageName)) {
-            $this->writeLn("Package {$packageName} already installed!");
-            return;
-        }
+        $installed = [];
         $root_path = $this->findMe();
+        $this->writeLn("Searching package {$packageName}...");
         $package = $this->_searchOne($packageName);
         if(!$package) {
-            return;
+            $this->writeLn("[ERROR] Package {$packageName} not found!");
+            return false;
         }
-        if(count($package['depends'])) {
+        $this->writeLn("Checking local packages...");
+        if($this->_installed($package)) {
+            $this->writeLn("[WARNING] Package {$package['name']} already installed!");
+            return false;
+        }
+        $this->writeLn("Installing package...");
+        if(!$force && count($package['depends'])) {
             $this->writeLn("=== Warning! ===");
-            $this->writeLn("This package has dependencies: " . implode(', ', $package['depends']));
             $this->writeLn("Package would not work without installed dependencies.");
             $this->writeLn("If you don't want to install dependencies you can not install this package!");
+            $this->writeLn("Dependencies: " . implode(', ', $package['depends']));
             $readline = trim(readline("Do you want to install all dependencies? [y/n]: "));
             $install_dependencies = strtolower($readline) == 'y';
-            var_dump($install_dependencies, $readline);
+            if(!$install_dependencies) {
+                $this->writeLn("[WARNING] Unable to install package without dependencies!");
+                return false;
+            }
             $this->writeLn("Installing dependencies...");
             foreach($package['depends'] as $dependency) {
                 $this->writeLn("Checking {$dependency}...");
-                $this->install($dependency);
+                if($this->install($dependency, true)) {
+                    $installed[] = $dependency;
+                }
             }
         }
         $url = $this->getConfig()['host'] . "{$package['name']}/{$package['name']}.phar";
-        $this->_wget($url, $root_path.$package['package']['path']);
-        $this->writeLn("Installed!");
+        $this->_wget($url, $root_path . $package['package']['path']);
+        $installed[] = $package['name'];
+        if(!$force) {
+            $this->writeLn("Installed packages: " . implode(', ', $installed));
+        } else {
+            $this->writeLn("Package installed!");
+        }
+        return true;
     }
 
-    protected function _installed($packageName)
+    public function update()
     {
-        $package = $this->_searchOne($packageName);
+        $this->_updatePackageListAndGetIt();
+    }
+
+    protected function _installed($package)
+    {
         $packageLocalPath = $this->getPackagePath($package, 'destination_file');
         return file_exists($packageLocalPath);
     }
@@ -97,11 +117,6 @@ extends helper
             $this->writeLn(sprintf($format, str_repeat('=', 6 - strlen($count)) . " Total: {$count} " . str_repeat('=', ($name_field/2)), str_repeat('=', $version_field), str_repeat('=', $description_field)));
         }
         print "---\n";
-    }
-
-    public function update($packageName = null)
-    {
-
     }
 
     public function reindex()

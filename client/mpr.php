@@ -22,6 +22,13 @@ extends helper
             return;
         }
         if(count($package['depends'])) {
+            $this->writeLn("=== Warning! ===");
+            $this->writeLn("This package has dependencies: " . implode(', ', $package['depends']));
+            $this->writeLn("Package would not work without installed dependencies.");
+            $this->writeLn("If you don't want to install dependencies you can not install this package!");
+            $readline = trim(readline("Do you want to install all dependencies? [y/n]: "));
+            $install_dependencies = strtolower($readline) == 'y';
+            var_dump($install_dependencies, $readline);
             $this->writeLn("Installing dependencies...");
             foreach($package['depends'] as $dependency) {
                 $this->writeLn("Checking {$dependency}...");
@@ -75,16 +82,19 @@ extends helper
             $this->writeLn("Please check your search string...");
             return;
         }
+        $name_field = 30;
+        $version_field = 10;
+        $description_field = 60;
         if(is_array($packages)) {
             $count = count($packages);
-            $format = '%1$15s | %2$10s | %3$60s';
-            $this->writeLn(sprintf($format, str_repeat('=', 15), str_repeat('=', 10), str_repeat('=', 60)));
+            $format = "%1\${$name_field}s | %2\${$version_field}s | %3\${$description_field}s";
+            $this->writeLn(sprintf($format, str_repeat('=', $name_field), str_repeat('=', $version_field), str_repeat('=', $description_field)));
             $this->writeLn(sprintf($format, "-NAME-", "-VERSION-", "-DESCRIPTION-"));
-            $this->writeLn(sprintf($format, str_repeat('-', 15), str_repeat('-', 10), str_repeat('-', 60)));
+            $this->writeLn(sprintf($format, str_repeat('-', $name_field), str_repeat('-', $version_field), str_repeat('-', $description_field)));
             foreach($packages as $package) {
                 $this->writeLn(sprintf($format, $package['name'], $package['package']['version'], $package['description']));
             }
-            $this->writeLn(sprintf($format, str_repeat('=', 7 - strlen($count)) . " Total: {$count}", str_repeat('=', 10), str_repeat('=', 60)));
+            $this->writeLn(sprintf($format, str_repeat('=', 6 - strlen($count)) . " Total: {$count} " . str_repeat('=', ($name_field/2)), str_repeat('=', $version_field), str_repeat('=', $description_field)));
         }
         print "---\n";
     }

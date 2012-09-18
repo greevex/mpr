@@ -1,6 +1,6 @@
 # mpr
 
-\m/ Package Repository.
+\m/ Package Repository
 ===
 
 Also may be "\m/ Phar Repository" ;)
@@ -20,7 +20,7 @@ Where is it would be helpful?
 In big projects may be. You create many not big git repositories for libraries. For each small library!
 Then you can use your packages in any project. Just `mpr init && mpr install my_mega_library` :)
 And also if you use mpr you protecting your project from dummies, who like to change something not in repository!
-Phar archives created by mpr is in gzip compression.
+Phar archives created by mpr is gzip compressed.
 
 Installation
 ===

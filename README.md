@@ -43,7 +43,7 @@ Real usage example
 [mpr] Repository was initialized! Now you can install packages!
 [greevex@ironman mpr-test]$ mpr search lib
 Update package list...
-Receiving http://mpr.sdstream.ru/manifest-global.mpr.json.gz...OK!
+Receiving http://mpr.greevex.ru/manifest-global.mpr.json.gz...OK!
 ============================== | ========== | ============================================================
                         -NAME- |  -VERSION- |                                                -DESCRIPTION-
 ------------------------------ | ---------- | ------------------------------------------------------------
@@ -66,11 +66,11 @@ Checking grunge...
 Searching package grunge...
 Checking local packages...
 Installing package...
-Receiving http://mpr.sdstream.ru/grunge/grunge.phar...OK!
+Receiving http://mpr.greevex.ru/grunge/grunge.phar...OK!
 Downloading content... [1903504 bytes]
 Content downloaded to /home/greevex/mpr-test/grunge.phar!
 Package installed!
-Receiving http://mpr.sdstream.ru/restapi_service/restapi_service.phar...OK!
+Receiving http://mpr.greevex.ru/restapi_service/restapi_service.phar...OK!
 Downloading content... [39260 bytes]
 Content downloaded to /home/greevex/mpr-test/libs/restapi_service.phar!
 Installed packages: grunge, restapi_service

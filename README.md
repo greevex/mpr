@@ -32,18 +32,17 @@ Usage
 * mpr install <package_name> - to install package and dependencies
 * mpr remove <package_name> - to remove package (Package dependencies would not be removed!)
 
-Example
+Real usage example
 ===
 ```
 
-[greevex@ironman new (master)]$ ls -la
-total 8
-drwxrwxr-x. 2 greevex greevex 4096 Sep 18 11:50 .
-drwxrwxr-x. 3 greevex greevex 4096 Sep 17 17:15 ..
-[greevex@ironman new (master)]$ mpr init
+[greevex@ironman ~]$ mkdir mpr-test
+[greevex@ironman ~]$ cd mpr-test/
+[greevex@ironman mpr-test]$ mpr init
 [mpr] Initializing mpr repository...
 [mpr] Repository was initialized! Now you can install packages!
-[greevex@ironman new (master)]$ mpr search lib
+[greevex@ironman mpr-test]$ mpr search lib
+Update package list...
 Receiving http://mpr.sdstream.ru/manifest-global.mpr.json.gz...OK!
 ============================== | ========== | ============================================================
                         -NAME- |  -VERSION- |                                                -DESCRIPTION-
@@ -52,45 +51,36 @@ Receiving http://mpr.sdstream.ru/manifest-global.mpr.json.gz...OK!
           twitter_streamclient |        3.0 |      Client for Twitter Streaming API based on Phirehose lib
 ===== Total: 2 =============== | ========== | ============================================================
 ---
-[greevex@ironman new (master)]$ mpr install restapi_service
-Receiving http://mpr.sdstream.ru/manifest-global.mpr.json.gz...OK!
+[greevex@ironman mpr-test]$ mpr install restapi_service
 Searching package restapi_service...
-Receiving http://mpr.sdstream.ru/manifest-global.mpr.json.gz...OK!
-Searching package restapi_service...
+Loading package list from cache. 52 seconds before next update.
+Checking local packages...
+Installing package...
 === Warning! ===
-This package has dependencies: grunge
 Package would not work without installed dependencies.
 If you don't want to install dependencies you can not install this package!
+Dependencies: grunge
 Do you want to install all dependencies? [y/n]: y
-bool(true)
-string(1) "y"
 Installing dependencies...
 Checking grunge...
-Receiving http://mpr.sdstream.ru/manifest-global.mpr.json.gz...OK!
 Searching package grunge...
-Receiving http://mpr.sdstream.ru/manifest-global.mpr.json.gz...OK!
-Searching package grunge...
+Checking local packages...
+Installing package...
 Receiving http://mpr.sdstream.ru/grunge/grunge.phar...OK!
-Connection opened!
 Downloading content... [1903504 bytes]
-Content downloaded to /opt/greevex/mpr/tests/new/grunge.phar!
-Installed!
+Content downloaded to /home/greevex/mpr-test/grunge.phar!
+Package installed!
 Receiving http://mpr.sdstream.ru/restapi_service/restapi_service.phar...OK!
-Connection opened!
 Downloading content... [39260 bytes]
-Content downloaded to /opt/greevex/mpr/tests/new/libs/restapi_service.phar!
-Installed!
-[greevex@ironman new (master)]$ ls -la
-total 1872
-drwxrwxr-x. 3 greevex greevex    4096 Sep 18 11:51 .
-drwxrwxr-x. 3 greevex greevex    4096 Sep 17 17:15 ..
--rw-rw-r--. 1 greevex greevex 1903504 Sep 18 11:51 grunge.phar
-drwxrwxr-x. 2 greevex greevex    4096 Sep 18 11:51 libs
--rw-rw-r--. 1 greevex greevex       0 Sep 18 11:50 .mprroot
-[greevex@ironman new (master)]$ ls -la libs
-total 48
-drwxrwxr-x. 2 greevex greevex  4096 Sep 18 11:51 .
-drwxrwxr-x. 3 greevex greevex  4096 Sep 18 11:51 ..
--rw-rw-r--. 1 greevex greevex 39260 Sep 18 11:51 restapi_service.phar
+Content downloaded to /home/greevex/mpr-test/libs/restapi_service.phar!
+Installed packages: grunge, restapi_service
+[greevex@ironman mpr-test]$ tree .
+.
+|-- grunge.phar
+`-- libs
+    `-- restapi_service.phar
+
+1 directory, 2 files
+
 
 ```

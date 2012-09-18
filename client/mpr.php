@@ -56,11 +56,28 @@ extends helper
         return true;
     }
 
+    /**
+     * Update package list from
+     *
+     * @return bool
+     */
     public function update()
     {
-        $this->_updatePackageListAndGetIt();
+        try {
+            $this->_updatePackageListAndGetIt();
+            return true;
+        } catch(\Exception $e) {
+            $this->writeLn("[ERROR] {$e->getMessage()}");
+            return false;
+        }
     }
 
+    /**
+     * Remove package from local repository
+     *
+     * @param string $packageName
+     * @return bool Result
+     */
     public function remove($packageName)
     {
         if($this->_installed($packageName)) {
@@ -70,11 +87,17 @@ extends helper
             exec("rm -rf {$packageLocalPath}");
             @unlink($packageLocalPath);
             $this->writeLn("Package was removed!");
-            exit;
+            return true;
         }
         $this->writeLn("Package {$packageName} not installed! Nothing to remove!");
+        return false;
     }
 
+    /**
+     * Init mpr repository in current directory
+     *
+     * @return bool Result
+     */
     public function init()
     {
         $path = realpath(".");
@@ -93,6 +116,11 @@ extends helper
         return true;
     }
 
+    /**
+     * Search in package list
+     *
+     * @param string $pattern Regular expression (e.g. search("tw?tter"))
+     */
     public function search($pattern)
     {
         $packages = $this->_search($pattern);
@@ -117,6 +145,11 @@ extends helper
         print "---\n";
     }
 
+    /**
+     * Write help info to stdout
+     *
+     *
+     */
     public function help()
     {
         $this->writeLn("---");

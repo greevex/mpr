@@ -24,16 +24,32 @@ class helper
         return $config;
     }
 
+    /**
+     * Write string
+     *
+     * @param string $string
+     */
     protected function write($string)
     {
         echo $string;
     }
 
+    /**
+     * Write string and EOL
+     *
+     * @param string $string
+     */
     protected function writeLn($string)
     {
         $this->write("{$string}\n");
     }
 
+    /**
+     * Search package by name
+     *
+     * @param $packageName
+     * @return array|null
+     */
     protected function _searchOne($packageName)
     {
         $packageList = $this->_getPackageList();
@@ -45,6 +61,11 @@ class helper
         return null;
     }
 
+    /**
+     * Find root path for local mpr repository
+     *
+     * @return bool|string
+     */
     protected function findMe()
     {
         static $path_to_mpr;
@@ -59,12 +80,19 @@ class helper
             }
             if(!$found) {
                 $this->writeLn("[ERROR] Repository not found! Please try to execute `mpr init` in repository root path!");
-                exit(1);
+                return false;
             }
         }
         return $path_to_mpr;
     }
 
+    /**
+     * Get package path
+     *
+     * @param array $package Package manifest array
+     * @param string $pathType Path type. Allowed values: filename,fileurl,destination_file,destination_folder
+     * @return string Path
+     */
     protected function getPackagePath($package, $pathType)
     {
         switch($pathType) {
@@ -79,6 +107,13 @@ class helper
         }
     }
 
+    /**
+     * Download data from repository with auth
+     *
+     * @param string $url Url to download from
+     * @param string|null $destination Path to download to
+     * @return bool Result
+     */
     protected function _wget($url, $destination = null)
     {
         $this->write("Receiving {$url}...");
@@ -100,7 +135,7 @@ class helper
                     return false;
                 }
                 $this->writeLn("OK!");
-                return $result;
+                return true;
             } else {
                 $fh = @fopen($url, 'rb', false, $context);
                 if($fh == false) {
@@ -117,12 +152,14 @@ class helper
                 }
                 $dest = @fopen($full_destination, 'wb');
                 if($dest == false) {
-                    return $this->writeLn("[ERROR] Error opening destination path. (Check permissions?)");
+                    $this->writeLn("[ERROR] Error opening destination path. (Check permissions?)");
+                    return false;
                 }
                 while(!feof($fh)) {
                     $buffer = fread($fh, 4096);
                     if($buffer === false) {
-                        return $this->writeLn("[ERROR] Error downloading content!");
+                        $this->writeLn("[ERROR] Error downloading content!");
+                        return false;
                     }
                     $bytesDownloaded += strlen($buffer);
                     fwrite($dest, $buffer);
@@ -140,12 +177,24 @@ class helper
         }
     }
 
+    /**
+     * Check is package installed in local repository
+     *
+     * @param array $package Package manifest array
+     * @return bool Result
+     */
     protected function _installed($package)
     {
         $packageLocalPath = $this->getPackagePath($package, 'destination_file');
         return file_exists($packageLocalPath);
     }
 
+    /**
+     * Search packages by regular expression
+     *
+     * @param string $input Regular expr. (e.g. "tw?tter")
+     * @return array|bool
+     */
     protected function _search($input)
     {
         if(empty($input)) {
@@ -153,7 +202,8 @@ class helper
         }
         $packageList = $this->_getPackageList();
         if(!is_array($packageList)) {
-            return $this->writeLn("Error resolving repository package list!");
+            $this->writeLn("[ERROR] Error resolving repository package list!");
+            return false;
         }
 
         $matches = [];
@@ -171,11 +221,21 @@ class helper
         return $matches;
     }
 
+    /**
+     * Get package list cache filepath
+     *
+     * @return string
+     */
     protected function _getPackageCacheFileName()
     {
         return '/tmp/packagelist.mpr';
     }
 
+    /**
+     * Update package list from remote repository and return it
+     *
+     * @return bool|string Result
+     */
     protected function _updatePackageListAndGetIt()
     {
         $cache_file = $this->_getPackageCacheFileName();
@@ -188,10 +248,17 @@ class helper
         } else {
             $data = gzuncompress($data);
         }
-        file_put_contents($cache_file, $data);
+        if($data !== false) {
+            file_put_contents($cache_file, $data);
+        }
         return $data;
     }
 
+    /**
+     * Return package list array (global manifest)
+     *
+     * @return array|bool
+     */
     protected function _getPackageList()
     {
         static $packages;
@@ -212,7 +279,8 @@ class helper
 
             $packages = json_decode($data, 1);
             if(!is_array($packages)) {
-                return $this->writeLn("[ERROR] Error loading package list!");
+                $this->writeLn("[ERROR] Error loading package list!");
+                return false;
             }
         }
         return $packages;

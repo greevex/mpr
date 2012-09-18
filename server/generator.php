@@ -5,7 +5,9 @@ class generator
 extends helper
 {
     /**
-     * ReIndex repository
+     * Reindex repository
+     *
+     * @return bool
      */
     public function reindex()
     {
@@ -45,5 +47,6 @@ extends helper
         file_put_contents($global_manifest_path, $encoded_content);
         @file_put_contents("{$global_manifest_path}.gz", gzcompress($encoded_content, 9));
         $this->writeLn("Global manifest file generated!");
+        return true;
     }
 }

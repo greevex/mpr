@@ -21,6 +21,12 @@ class helper
         return $config;
     }
 
+    /**
+     * Build mpr package (.phar) by package manifest array
+     *
+     * @param array $package Package manifest array
+     * @return bool Result
+     */
     protected function createMprPackage($package)
     {
         try {
@@ -49,6 +55,12 @@ class helper
         }
     }
 
+    /**
+     * Load manifest by package folder path
+     *
+     * @param string $fullpath Path to package folder
+     * @return bool Result
+     */
     protected function loadManifest($fullpath)
     {
         $manifest_data = file_get_contents("{$fullpath}/manifest.mpr.json");
@@ -64,6 +76,14 @@ class helper
         return $this->validateManifest($manifest) ? $manifest : false;
     }
 
+    /**
+     * Check param to be valid
+     *
+     * @param array $package Package manifest array
+     * @param string $param Param key
+     * @param bool $needBeArray Is this param need be an instance of array
+     * @return bool Result
+     */
     protected function checkParam($package, $param, $needBeArray = false)
     {
         if(!isset($package[$param])) {
@@ -76,22 +96,34 @@ class helper
         return true;
     }
 
-
+    /**
+     * Validate current manifest
+     *
+     * @param array $package Package manifest
+     * @return bool Result
+     */
     protected function validateManifest($package)
     {
-        $this->checkParam($package, "name");
-        $this->checkParam($package, "description");
-        $this->checkParam($package, "package", true);
-        $this->checkParam($package['package'], "path");
-        $this->checkParam($package['package'], "init");
-        $this->checkParam($package['package'], "version");
-        $this->checkParam($package, "meta", true);
-        $this->checkParam($package['meta'], "type");
-        $this->checkParam($package['meta'], "tags");
-        $this->checkParam($package, "depends", true);
-        return true;
+        return (
+            $this->checkParam($package, "name") &&
+            $this->checkParam($package, "description") &&
+            $this->checkParam($package, "package", true) &&
+            $this->checkParam($package['package'], "path") &&
+            $this->checkParam($package['package'], "init") &&
+            $this->checkParam($package['package'], "version") &&
+            $this->checkParam($package, "meta", true) &&
+            $this->checkParam($package['meta'], "type") &&
+            $this->checkParam($package['meta'], "tags") &&
+            $this->checkParam($package, "depends", true)
+        );
     }
 
+    /**
+     * Get package manifest by package name
+     *
+     * @param string $packageName Package name
+     * @return bool|array Result
+     */
     protected function getManifest($packageName)
     {
         $lib_path = $this->getConfig()['libs_root'] . "{$packageName}";
@@ -103,11 +135,21 @@ class helper
         return $manifest;
     }
 
+    /**
+     * Write string
+     *
+     * @param string $string
+     */
     protected function write($string)
     {
         echo $string;
     }
 
+    /**
+     * Write string and EOL
+     *
+     * @param string $string
+     */
     protected function writeLn($string)
     {
         $this->write("{$string}\n");

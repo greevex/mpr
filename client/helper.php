@@ -197,11 +197,15 @@ class helper
         static $packages;
         if($packages == null) {
             $cache_file = $this->_getPackageCacheFileName();
-            $filetime = filemtime($cache_file);
-            $next_cache_update = $filetime + 60;
-            if(file_exists($cache_file) && $next_cache_update > time()) {
-                $this->writeLn("Loading package list from cache. " . ($next_cache_update - time()) . " seconds before next update.");
-                $data = file_get_contents($cache_file);
+            if(file_exists($cache_file)) {
+                $filetime = filemtime($cache_file);
+                $next_cache_update = $filetime + 60;
+                if($next_cache_update > time()) {
+                    $this->writeLn("Loading package list from cache. " . ($next_cache_update - time()) . " seconds before next update.");
+                    $data = file_get_contents($cache_file);
+                } else {
+                    $data = $this->_updatePackageListAndGetIt();
+                }
             } else {
                 $data = $this->_updatePackageListAndGetIt();
             }

@@ -1,12 +1,11 @@
-# mpr
-
 \m/ Package Repository
 ===
 
-Also may be "\m/ Phar Repository" ;)
+Published under MIT license.
+
+Variations: (\m/|Mini) (Phar|Package) Repository ;)
 
 All you need is: static web-server as repository, cron (to generate global manifest) and Phar php extension.
-
 
 Requirements:
  * PHP 5.4+

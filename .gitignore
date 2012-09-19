@@ -1,3 +1,4 @@
 client/config.json
 server/config.json
 .idea/
+*.src.tar.gz

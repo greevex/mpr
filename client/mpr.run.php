@@ -1,8 +1,11 @@
+#!/usr/bin/php
 <?php
 namespace mpr\client;
 
-require_once __DIR__ . '/helper.php';
-require_once __DIR__ . '/mpr.php';
+$pathToLibs = __DIR__;
+
+require_once "{$pathToLibs}/helper.php";
+require_once "{$pathToLibs}/mpr.php";
 
 $mpr = new mpr();
 $function = isset($argv[1]) ? $argv[1] : 'help';

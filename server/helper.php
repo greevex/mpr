@@ -12,9 +12,14 @@ class helper
     {
         static $config;
         if($config == null) {
-            $config = json_decode(file_get_contents(__DIR__ . "/config.json"), 1);
+            $configPath = __DIR__ . "/config.json";
+            if(!file_exists($configPath)) {
+                $this->writeLn("[ERROR] File {$configPath} not found! You can find sample config at " . __DIR__ . "/config.sample.json");
+                exit(1);
+            }
+            $config = json_decode(file_get_contents($configPath), 1);
             if(!is_array($config)) {
-                $this->writeLn("Error loading config.json!");
+                $this->writeLn("[ERROR] Error loading config.json! Something wrong with the file!");
                 exit(1);
             }
         }
